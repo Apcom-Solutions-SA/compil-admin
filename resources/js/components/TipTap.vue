@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tiptap-wrapper">
     <div
       class="tiptap-menu d-flex flex-wrap align-items-center"
       v-if="editor"
