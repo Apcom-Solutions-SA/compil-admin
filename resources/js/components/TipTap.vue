@@ -7,18 +7,23 @@
       <!-- basic formatting -->
       <div>
         <button
+          type="button"
           @click="editor.chain().focus().toggleBold().run()"
           :class="{ 'is-active': editor.isActive('bold') }"
         >
           <i class="fas fa-bold"></i>
         </button>
+
         <button
+          type="button"
           @click="editor.chain().focus().toggleItalic().run()"
           :class="{ 'is-active': editor.isActive('italic') }"
         >
           <i class="fas fa-italic"></i>
         </button>
+
         <button
+          type="button"
           @click="editor.chain().focus().toggleStrike().run()"
           :class="{ 'is-active': editor.isActive('strike') }"
         >
@@ -26,6 +31,7 @@
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().toggleCode().run()"
           :class="{ 'is-active': editor.isActive('code') }"
         >
@@ -33,6 +39,7 @@
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().setParagraph().run()"
           :class="{ 'is-active': editor.isActive('paragraph') }"
         >
@@ -42,23 +49,36 @@
 
       <!-- no icons yet -->
       <div v-if="false">
-        <button @click="editor.chain().focus().unsetAllMarks().run()">
+        <button
+          type="button"
+          @click="editor.chain().focus().unsetAllMarks().run()"
+        >
           clear marks
         </button>
 
-        <button @click="editor.chain().focus().clearNodes().run()">
+        <button
+          type="button"
+          @click="editor.chain().focus().clearNodes().run()"
+        >
           clear nodes
         </button>
 
-        <button @click="editor.chain().focus().setHorizontalRule().run()">
+        <button
+          type="button"
+          @click="editor.chain().focus().setHorizontalRule().run()"
+        >
           horizontal rule
         </button>
 
-        <button @click="editor.chain().focus().setHardBreak().run()">
+        <button
+          type="button"
+          @click="editor.chain().focus().setHardBreak().run()"
+        >
           hard break
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().toggleCodeBlock().run()"
           :class="{ 'is-active': editor.isActive('codeBlock') }"
         >
@@ -68,6 +88,7 @@
 
       <!-- list -->
       <button
+        type="button"
         @click="editor.chain().focus().toggleBulletList().run()"
         :class="{ 'is-active': editor.isActive('bulletList') }"
       >
@@ -75,6 +96,7 @@
       </button>
 
       <button
+        type="button"
         @click="editor.chain().focus().toggleOrderedList().run()"
         :class="{ 'is-active': editor.isActive('orderedList') }"
       >
@@ -82,6 +104,7 @@
       </button>
 
       <button
+        type="button"
         @click="editor.chain().focus().toggleBlockquote().run()"
         :class="{ 'is-active': editor.isActive('blockquote') }"
       >
@@ -89,43 +112,52 @@
       </button>
 
       <!-- image -->
-      <button @click="addImage">
+      <button
+        type="button"
+        @click="addImage"
+      >
         <i class="far fa-image"></i>
       </button>
 
       <!-- heading-->
       <div>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
         >
           h1
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
         >
           h2
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         >
           h3
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
         >
           h4
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
         >
           h5
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
           :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
         >
@@ -136,24 +168,28 @@
       <!-- text align -->
       <div>
         <button
+          type="button"
           @click="editor.chain().focus().setTextAlign('left').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }"
         >
           <i class="fas fa-align-left"></i>
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().setTextAlign('center').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }"
         >
           <i class="fas fa-align-center"></i>
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().setTextAlign('right').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }"
         >
           <i class="fas fa-align-right"></i>
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().setTextAlign('justify').run()"
           :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
         >
@@ -164,6 +200,7 @@
       <!--high light-->
       <div>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight().run()"
           :class="{ 'is-active': editor.isActive('highlight') }"
         >
@@ -171,6 +208,7 @@
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight({
             color: ''
           }).run()"
@@ -185,6 +223,7 @@
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight({ color: 'red' }).run()"
           :class="{ 'is-active': editor.isActive('highlight', { color: 'red' }) }"
         >
@@ -195,6 +234,7 @@
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight({ color: '#ffc078' }).run()"
           :class="{ 'is-active': editor.isActive('highlight', { color: '#ffc078' }) }"
         >
@@ -204,6 +244,7 @@
           ></i>
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight({ color: '#8ce99a' }).run()"
           :class="{ 'is-active': editor.isActive('highlight', { color: '#8ce99a' }) }"
         >
@@ -213,6 +254,7 @@
           ></i>
         </button>
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight({ color: '#74c0fc' }).run()"
           :class="{ 'is-active': editor.isActive('highlight', { color: '#74c0fc' }) }"
         >
@@ -223,6 +265,7 @@
         </button>
 
         <button
+          type="button"
           @click="editor.chain().focus().toggleHighlight({ color: '#b197fc' }).run()"
           :class="{ 'is-active': editor.isActive('highlight', { color: '#b197fc' }) }"
         >
@@ -233,19 +276,30 @@
         </button>
       </div>
 
-      <button @click="editor.chain().focus().undo().run()">
+      <button
+        type="button"
+        @click="editor.chain().focus().undo().run()"
+      >
         <i class="fas fa-undo"></i>
       </button>
-      <button @click="editor.chain().focus().redo().run()">
+      <button
+        type="button"
+        @click="editor.chain().focus().redo().run()"
+      >
         <i class="fas fa-redo"></i>
       </button>
     </div>
+
     <editor-content :editor="editor" />
   </div>
 </template>
 
 <script>
-import { Editor, EditorContent, BubbleMenu, FloatingMenu } from '@tiptap/vue-2'
+import {
+  Editor, EditorContent,
+  // BubbleMenu, 
+  // FloatingMenu 
+} from '@tiptap/vue-2'
 import { defaultExtensions } from '@tiptap/starter-kit'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -256,13 +310,10 @@ import Image from '@tiptap/extension-image'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import TextAlign from '@tiptap/extension-text-align'
 
-import Icon from "./Icon";
-
 export default {
   components: {
     EditorContent,
-    BubbleMenu,
-    Icon
+    // BubbleMenu,
   },
 
   props: {
@@ -298,13 +349,9 @@ export default {
     this.editor = new Editor({
       extensions: [
         ...defaultExtensions(),
-        Document,
-        Paragraph,
-        Text,
         Highlight.configure({ multicolor: true }),
         Typography,
         Image,
-        Dropcursor,
         TextAlign,
       ],
       content: this.value,

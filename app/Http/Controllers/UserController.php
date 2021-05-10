@@ -42,7 +42,7 @@ class UserController extends Controller
             $users = User::whereIn('role_id', [1, 2])->orderBy('id', 'desc');   // employees
         }
         if ($role_id == 3) {
-            $users = User::with(['user_groups'])->where('role_id', 3)->orderBy('id', 'desc');
+            $users = User::where('role_id', 3)->orderBy('id', 'desc');
         }
         if ($request->search) {
             $search = $request->search;
