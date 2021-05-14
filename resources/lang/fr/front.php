@@ -272,4 +272,5 @@ Le code est transmis au parent principal uniquement via les titulaires.',
   'info_production_status' => 'Infobulle Statut de production',
   'validation_deadline' => 'Délais de validation',
   'nothing_ordered' => 'Rien commandé',
+  'hide_irrelavent_authors' => 'masquer les auteurs non pertinents',
 );

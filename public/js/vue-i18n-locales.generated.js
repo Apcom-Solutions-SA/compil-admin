@@ -1094,7 +1094,8 @@
             "replace_all": "Remplacer tous",
             "info_production_status": "Infobulle Statut de production",
             "validation_deadline": "Délais de validation",
-            "nothing_ordered": "Rien commandé"
+            "nothing_ordered": "Rien commandé",
+            "hide_irrelavent_authors": "masquer les auteurs non pertinents"
         },
         "pagination": {
             "previous": "&laquo; Précédent",

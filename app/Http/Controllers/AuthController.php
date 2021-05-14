@@ -25,7 +25,8 @@ class AuthController extends Controller
             $email = Auth::user()->email;
             $token = Auth::user()->createToken($email)->accessToken;
             return response()->json([
-                'token' => $token
+                'token' => $token, 
+                'user' => Auth::user()
             ]);
         }
 

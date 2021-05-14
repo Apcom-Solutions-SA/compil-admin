@@ -15,7 +15,7 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsinged();
+            $table->integer('group_id')->unsinged();
             $table->longText('title');
             $table->longText('introduction');
             $table->longText('content');

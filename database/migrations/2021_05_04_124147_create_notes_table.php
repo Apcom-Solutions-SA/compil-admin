@@ -19,8 +19,8 @@ class CreateNotesTable extends Migration
             // $table->string('key_public');
             $table->string('title');
             $table->text('introduction');
-            $table->longText('body');
-            $table->string('key'); 
+            $table->longText('content')->nullable();
+            $table->string('key')->nullable(); 
             $table->timestamps();
         });
     }
