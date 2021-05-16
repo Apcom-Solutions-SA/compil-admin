@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Group;
 use App\Models\Note;
 
@@ -40,8 +41,8 @@ class NoteController extends Controller
 
     public function index_user(Request $request)
     {
-        $user = $request->user(); 
-        $notes = Note::orderBy('id', 'desc')->where('user_id', $user->id); 
+        $user = $request->user();
+        $notes = Note::orderBy('id', 'desc')->where('user_id', $user->id);
 
         $per_note = $request->per_note ?? setting('admin.per_page');
         return $notes->paginate($per_note);
@@ -58,10 +59,33 @@ class NoteController extends Controller
             'title' => 'required|string|max:191',
             //   'group_id' => 'nullable|exists:groups,id',
         ]);
-        $note = Note::create($request->all() + ['user_id' => $request->user()->id]);
+
+        $note = Note::create($request->only(['title', 'introduction', 'content']) + ['user_id' => $request->user()->id]);
+
+        if ($request->tags){
+            $note->attachTags($request->tags);
+        }
+
+        // reference
+        // y: A two digit representation of a year
+        // m: Numeric representation of a month, with leading zeros, 01 through 12
+        $number = Note::whereRaw('YEAR(created_at) = ?', [date('Y')])->count();
+        $reference = date('y.') . sprintf('%03d', $number + 1);   // 4 digits with padding 0
+        $note->reference = $reference;
+        $note->update();
 
         return response()->json([
             'note' => $note,
+        ]);
+    }
+
+    public function show(Request $request, int $id)
+    {
+        $note = Note::with(['user'])->find($id);
+        $tags = $note->tags; 
+        return response()->json([
+            'note' => $note,
+            'tags' => $tags,
         ]);
     }
 
@@ -72,9 +96,11 @@ class NoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Note $note)
-    {
-        $note->update($request->all());
-
+    {        
+        $note->update($request->only(['title', 'introduction', 'content']));
+        if ($request->tags){            
+            $note->syncTags($request->tags);
+        }
         return response()->json([
             'note' => $note,
         ]);

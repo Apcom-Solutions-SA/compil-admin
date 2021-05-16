@@ -21,7 +21,7 @@
           href="/clients"
           :class="{'active': ['/clients'].includes(pathname)}"
         >
-          {{ $t("admin.client") }}
+          {{ $t("admin.users") }}
         </a>
       </li>
 

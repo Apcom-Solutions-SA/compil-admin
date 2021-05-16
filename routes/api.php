@@ -23,8 +23,11 @@ Route::group(['prefix' => 'v1'], function(){
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
-    Route::post('/notes', 'NoteController@store');
-    Route::get('/notes', 'NoteController@index_user'); 
-
     Route::get('/list/pages', 'PageController@list_api'); 
+
+    Route::get('/notes', 'NoteController@index_user'); 
+    Route::post('/notes', 'NoteController@store');    
+    Route::get('/notes/{id}', 'NoteController@show'); 
+    Route::patch('/notes/{note}', 'NoteController@update'); 
+    
 });
