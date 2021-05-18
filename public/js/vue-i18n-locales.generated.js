@@ -1,9 +1,4 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-        typeof define === 'function' && define.amd ? define(factory) :
-            typeof global.vuei18nLocales === 'undefined' ? global.vuei18nLocales = factory() : Object.keys(factory()).forEach(function (key) {global.vuei18nLocales[key] = factory()[key]});
-}(this, (function () { 'use strict';
-    return {
+{
     "de": {
         "A fresh verification link has been sent to your email address.": "Ein neuer Verifikationslink wurde verschickt.",
         "All rights reserved.": "Alle Rechte vorbehalten.",
@@ -294,12 +289,28 @@
             "tagline": "Tagline",
             "footer_active": "Footer active",
             "introduction": "Introduction",
-            "content": "Content"
+            "content": "Content",
+            "Thanks": "Thanks"
         },
         "auth": {
             "failed": "These credentials do not match our records.",
             "password": "The provided password is incorrect.",
             "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+        },
+        "front": {
+            "publish": "Publish",
+            "hide_irrelavent_authors": "hide irrelavent authors",
+            "note_key_limite": "Prohibit spaces, appostrophes and quotation marks.",
+            "save": "Save",
+            "intro": "Intro",
+            "tags": "Tags",
+            "return": "Return",
+            "created_at": "Created at",
+            "updated_at": "Updated at",
+            "author": "Author",
+            "enter_email": "enter the volunteer's email here",
+            "thanks": "Thanks",
+            "user_added_message": "You are added as user of Compil, this is your login key:"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -827,7 +838,8 @@
             "footer_active": "Footer active",
             "introduction": "Accroche",
             "notes": "Notes",
-            "admins": "Admins"
+            "admins": "Admins",
+            "Thanks": "Merci"
         },
         "auth": {
             "failed": "Ces identifiants ne correspondent pas à nos enregistrements",
@@ -868,7 +880,7 @@
             "locality": "Localité",
             "image": "image",
             "optional": "optionnelle",
-            "save": "Sauvegarder",
+            "save": "Enregistrer",
             "add": "Ajouter",
             "edit": "Modifier",
             "delete": "Supprimer",
@@ -887,7 +899,7 @@
             "welcome": "Bienvenue",
             "users": "Utilisateurs",
             "create_successs": "Créé avec succès",
-            "return": "Retourner",
+            "return": "Retour",
             "icon": "icône",
             "number_registered_users": "Nombre d'utilisateurs enregistrés",
             "publish_success": "Publié avec succès!",
@@ -943,7 +955,7 @@
             "consumers": "Consommateurs",
             "consumer": "Consommateur",
             "atelier_studio_description_2": "Le studio photo sera ouvert les mercredis de 09h à 18h. Les autres jours de la semaine, je vous invite à me contacter pour m'avertir de votre venue 079 271 73 63 ou par e-mail à idr@netplus.ch",
-            "atelier_studio_description_1": "PHOTOGRAPHE PROFESSIONNELLE ET STUDIO PHOTO AU COEUR DU VALAIS À SAVIÈSE\nPhotos pour PME et indépendants\nPhotos d'identité, CV\nPortraits individuels / groupe\nTirages photo sur papier\nNumérisation à partir de tirages papier, négatifs et diapositives\nReproduction d'oeuvres\nEvénements, fêtes...",
+            "atelier_studio_description_1": "PHOTOGRAPHE PROFESSIONNELLE ET STUDIO PHOTO AU COEUR DU VALAIS À SAVIÈSE\r\nPhotos pour PME et indépendants\r\nPhotos d'identité, CV\r\nPortraits individuels / groupe\r\nTirages photo sur papier\r\nNumérisation à partir de tirages papier, négatifs et diapositives\r\nReproduction d'oeuvres\r\nEvénements, fêtes...",
             "city": "Lieu",
             "request_history": "Historique de demande",
             "my_info": "Mes information",
@@ -988,7 +1000,7 @@
             "sub": "Sub",
             "total": "Total",
             "payment_select": "Paiement de ma commande",
-            "noscript_message": "Pour accéder à toutes les fonctionnalités de ce site, vous devez activer JavaScript.<br>\nVoici les <a href=\"https://www.enable-javascript.com/fr/\">instructions pour activer JavaScript dans votre navigateur Web</a>.",
+            "noscript_message": "Pour accéder à toutes les fonctionnalités de ce site, vous devez activer JavaScript.<br>\r\nVoici les <a href=\"https://www.enable-javascript.com/fr/\">instructions pour activer JavaScript dans votre navigateur Web</a>.",
             "reference": "Référence",
             "bill": "Facture",
             "tel": "Tel",
@@ -1004,7 +1016,7 @@
             "photo_lab": "Labo photo",
             "products": "Produits",
             "admin": "Admin",
-            "please_student_slug": "Veuillez taper le code de l'élève. \nCONSEIL: CONSERVER UNE COPIE DU CODE EN CAS DE PERTE !\nLe code est transmis au parent principal uniquement via les titulaires.",
+            "please_student_slug": "Veuillez taper le code de l'élève. \r\nCONSEIL: CONSERVER UNE COPIE DU CODE EN CAS DE PERTE !\r\nLe code est transmis au parent principal uniquement via les titulaires.",
             "verify_student": "Veuillez vérifier les informations sur l'élève",
             "general_conditions": "Conditions générales",
             "payment_online": "Paiement en ligne",
@@ -1095,7 +1107,16 @@
             "info_production_status": "Infobulle Statut de production",
             "validation_deadline": "Délais de validation",
             "nothing_ordered": "Rien commandé",
-            "hide_irrelavent_authors": "masquer les auteurs non pertinents"
+            "hide_irrelavent_authors": "masquer les auteurs non pertinents",
+            "note_key_limite": "Interdire les espaces, les appostrophes et les guillemets.",
+            "intro": "Intro",
+            "tags": "Tags",
+            "created_at": "Créé le",
+            "updated_at": "Dernière modification",
+            "author": "Autheur",
+            "enter_email": "enter l'email du volontaire ici",
+            "user_added_message": "Vous êtes ajouté en tant qu'utilisateur de Compil, voici votre clé de connexion",
+            "thanks": "Merci"
         },
         "pagination": {
             "previous": "&laquo; Précédent",
@@ -1293,5 +1314,3 @@
         }
     }
 }
-
-})));

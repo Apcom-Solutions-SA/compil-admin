@@ -52,5 +52,6 @@
     "about": "à propos",
     "Action": "Action",
     "Modifed with success!": "Modifié avec succès!",
-    "Added with success!": "Ajouté avec succès!"
+    "Added with success!": "Ajouté avec succès!", 
+    "Please log in once via this url to validate your account.":"Veuillez vous connecter une première fois via cette url pour valider votre compte."
 }

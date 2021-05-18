@@ -344,4 +344,5 @@ return array (
   'introduction' => 'Accroche',
   'notes' => 'Notes',
   'admins' => 'Admins',
+  'Thanks' => 'Merci',
 );

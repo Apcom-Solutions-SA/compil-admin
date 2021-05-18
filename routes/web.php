@@ -28,6 +28,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Auth::routes([
     'register' => false, 
+    'verify' => true
 ]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -55,6 +56,8 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
     // localse
     Route::get('/locales', 'PageController@getLocales'); 
+
+    Route::get('/test', 'UserController@email'); 
 });
 
 // Settings

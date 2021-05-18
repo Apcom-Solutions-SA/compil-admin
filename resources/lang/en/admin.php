@@ -6,4 +6,5 @@ return array (
   'footer_active' => 'Footer active',
   'introduction' => 'Introduction',
   'content' => 'Content',
+  'Thanks' => 'Thanks',
 );

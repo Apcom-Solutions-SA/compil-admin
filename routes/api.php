@@ -23,6 +23,7 @@ Route::group(['prefix' => 'v1'], function(){
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
+    Route::post('/user/email', 'UserController@email');
     Route::get('/list/pages', 'PageController@list_api'); 
 
     Route::get('/notes', 'NoteController@index_user'); 

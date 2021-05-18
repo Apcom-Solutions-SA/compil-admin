@@ -15,6 +15,6 @@ class Page extends Model
     public $timestamps = false;
     protected $attributes = [
         'active' => 1,
-        'footer' => 1,
+        'footer' => 0,
     ];
 }

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Generator; 
 
+// https://github.com/martinlindhe/laravel-vue-i18n-generator
 class GenerateInclude extends Command
 {
     /**

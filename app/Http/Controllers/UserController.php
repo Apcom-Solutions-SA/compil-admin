@@ -4,12 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Group;
+use App\Mail\UserAdded; 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
+    public function email(Request $request)
+    {        
+        // create user         
+        $request->validate([
+            'email' => 'required|email|unique:users',
+        ]);        
+        
+        $key = random_key();
+                   
+        $user = User::create($request->except(['password']) + [
+            'email' => $request->email,
+            'password' => Hash::make($key), 
+            'active' => 0,
+        ]);
+
+        // get verification url 
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+            [
+                'id' => $user->getKey(),
+                'hash' => sha1($user->getEmailForVerification()),
+            ]
+        );
+        Mail::to($user)->send(new UserAdded($key, $url));        
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
     public function index_admins(Request $request)
     {
         // DB::table('users')->whereBetween('id', [88,137])->update(['role_id'=>3]); 
@@ -68,6 +106,7 @@ class UserController extends Controller
         $request->validate([
             'email' => 'required|email|unique:users',
         ]);
+
         $user = User::create($request->except(['password']) + [
             'password' => Hash::make($request->password),
             'active' => 1,
@@ -124,25 +163,4 @@ class UserController extends Controller
         ]);
     }
 
-    // api for update groups for a certain user
-    public function update_groups(Request $request)
-    {
-        $user_id = $request->user_id;
-        $groups_id = array_map('intval', $request->groups);
-        DB::table('user_group')
-            ->where('user_id', $user_id)
-            ->whereNotIn('user_id', $groups_id)
-            ->delete();
-        foreach ($groups_id as $group_id) {
-            UserGroup::firstOrCreate([
-                'user_id' => $user_id,
-                'group_id' => $group_id
-            ]);
-        }
-        $user_groups = UserGroup::where('user_id', $user_id)->get();
-        return response()->json([
-            'user_groups' => $user_groups,
-            'message' => 'Mis à jour groupes',
-        ]);
-    }
 }
