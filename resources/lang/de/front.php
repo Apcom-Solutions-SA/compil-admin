@@ -63,4 +63,5 @@ return array (
   'add' => 'hinzufügen',
   'translations' => 'übersetzungen',
   'address' => 'Adresse',
+  'email_not_verified' => 'Die E-Mail ist nicht verifiziert',
 );

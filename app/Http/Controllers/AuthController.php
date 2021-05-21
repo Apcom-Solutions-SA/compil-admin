@@ -16,6 +16,22 @@ class AuthController extends Controller
     // auth for api token
     public function login()
     {
+        // Impossible de s connecter avec une clé secrète valable si le compte est not verified.
+        $email = request('email'); 
+        $user = User::where('email', $email)->first(); 
+        if (is_null($user)) {
+            return response()->json([
+                'message' => __('front.email_not_registered')
+            ], 401);
+        }
+
+        if (is_null($user->email_verified_at)) {
+            return response()->json([
+                'message' => __('front.email_not_verified')
+            ], 401);
+        }
+
+
         $credentials = [
             'email' => request('email'),
             'password' => request('password')
@@ -30,7 +46,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Unauthorised'], 401);
+        return response()->json(['message' => __('Unauthorised')], 401);
     }
 
     public function register(Request $request)

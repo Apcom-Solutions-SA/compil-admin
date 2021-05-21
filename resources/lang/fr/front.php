@@ -282,4 +282,6 @@ Le code est transmis au parent principal uniquement via les titulaires.',
   'enter_email' => 'enter l\'email du volontaire ici',
   'user_added_message' => 'Vous êtes ajouté en tant qu\'utilisateur de Compil, voici votre clé de connexion',
   'thanks' => 'Merci',
+  'added_success' => 'Ajouté avec succès!',
+  'email_not_verified' => 'L\'email n\'est pas vérifié',
 );

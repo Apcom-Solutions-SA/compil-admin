@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::resource('/notes', 'NoteController')->only(['index', 'store', 'update', 'destroy']);
     Route::get('/api/notes', 'NoteController@index_api');
 
-    // localse
+    // locales
     Route::get('/locales', 'PageController@getLocales'); 
 
     Route::get('/test', 'UserController@email'); 

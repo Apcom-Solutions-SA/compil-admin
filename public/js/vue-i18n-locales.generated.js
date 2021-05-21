@@ -1,4 +1,9 @@
-{
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+        typeof define === 'function' && define.amd ? define(factory) :
+            typeof global.vuei18nLocales === 'undefined' ? global.vuei18nLocales = factory() : Object.keys(factory()).forEach(function (key) {global.vuei18nLocales[key] = factory()[key]});
+}(this, (function () { 'use strict';
+    return {
     "de": {
         "A fresh verification link has been sent to your email address.": "Ein neuer Verifikationslink wurde verschickt.",
         "All rights reserved.": "Alle Rechte vorbehalten.",
@@ -54,6 +59,7 @@
         "Action": "Aktion",
         "Modifed with success!": "Mit Erfolg verändert!",
         "Added with success!": "Mit Erfolg hinzugefügt!",
+        "Please log in once via this url to validate your account.": "Bitte melden Sie sich einmalig über diese Url, um Ihr Konto zu validieren.",
         "admin": {
             "title": "Titel",
             "search": "Suchen",
@@ -126,7 +132,8 @@
             "categories": "Kategorien",
             "add": "hinzufügen",
             "translations": "übersetzungen",
-            "address": "Adresse"
+            "address": "Adresse",
+            "email_not_verified": "Die E-Mail ist nicht verifiziert"
         },
         "pagination": {
             "previous": "&laquo; Zurück",
@@ -310,7 +317,9 @@
             "author": "Author",
             "enter_email": "enter the volunteer's email here",
             "thanks": "Thanks",
-            "user_added_message": "You are added as user of Compil, this is your login key:"
+            "user_added_message": "You are added as user of Compil, this is your login key:",
+            "added_success": "Added with success!",
+            "email_not_verified": "The email is not verified"
         },
         "pagination": {
             "previous": "&laquo; Previous",
@@ -495,6 +504,7 @@
         "Action": "Action",
         "Modifed with success!": "Modifié avec succès!",
         "Added with success!": "Ajouté avec succès!",
+        "Please log in once via this url to validate your account.": "Veuillez vous connecter une première fois via cette url pour valider votre compte.",
         "admin": {
             "warm": "Chaude",
             "cold": "Froide",
@@ -955,7 +965,7 @@
             "consumers": "Consommateurs",
             "consumer": "Consommateur",
             "atelier_studio_description_2": "Le studio photo sera ouvert les mercredis de 09h à 18h. Les autres jours de la semaine, je vous invite à me contacter pour m'avertir de votre venue 079 271 73 63 ou par e-mail à idr@netplus.ch",
-            "atelier_studio_description_1": "PHOTOGRAPHE PROFESSIONNELLE ET STUDIO PHOTO AU COEUR DU VALAIS À SAVIÈSE\r\nPhotos pour PME et indépendants\r\nPhotos d'identité, CV\r\nPortraits individuels / groupe\r\nTirages photo sur papier\r\nNumérisation à partir de tirages papier, négatifs et diapositives\r\nReproduction d'oeuvres\r\nEvénements, fêtes...",
+            "atelier_studio_description_1": "PHOTOGRAPHE PROFESSIONNELLE ET STUDIO PHOTO AU COEUR DU VALAIS À SAVIÈSE\nPhotos pour PME et indépendants\nPhotos d'identité, CV\nPortraits individuels / groupe\nTirages photo sur papier\nNumérisation à partir de tirages papier, négatifs et diapositives\nReproduction d'oeuvres\nEvénements, fêtes...",
             "city": "Lieu",
             "request_history": "Historique de demande",
             "my_info": "Mes information",
@@ -1000,7 +1010,7 @@
             "sub": "Sub",
             "total": "Total",
             "payment_select": "Paiement de ma commande",
-            "noscript_message": "Pour accéder à toutes les fonctionnalités de ce site, vous devez activer JavaScript.<br>\r\nVoici les <a href=\"https://www.enable-javascript.com/fr/\">instructions pour activer JavaScript dans votre navigateur Web</a>.",
+            "noscript_message": "Pour accéder à toutes les fonctionnalités de ce site, vous devez activer JavaScript.<br>\nVoici les <a href=\"https://www.enable-javascript.com/fr/\">instructions pour activer JavaScript dans votre navigateur Web</a>.",
             "reference": "Référence",
             "bill": "Facture",
             "tel": "Tel",
@@ -1016,7 +1026,7 @@
             "photo_lab": "Labo photo",
             "products": "Produits",
             "admin": "Admin",
-            "please_student_slug": "Veuillez taper le code de l'élève. \r\nCONSEIL: CONSERVER UNE COPIE DU CODE EN CAS DE PERTE !\r\nLe code est transmis au parent principal uniquement via les titulaires.",
+            "please_student_slug": "Veuillez taper le code de l'élève. \nCONSEIL: CONSERVER UNE COPIE DU CODE EN CAS DE PERTE !\nLe code est transmis au parent principal uniquement via les titulaires.",
             "verify_student": "Veuillez vérifier les informations sur l'élève",
             "general_conditions": "Conditions générales",
             "payment_online": "Paiement en ligne",
@@ -1116,7 +1126,9 @@
             "author": "Autheur",
             "enter_email": "enter l'email du volontaire ici",
             "user_added_message": "Vous êtes ajouté en tant qu'utilisateur de Compil, voici votre clé de connexion",
-            "thanks": "Merci"
+            "thanks": "Merci",
+            "added_success": "Ajouté avec succès!",
+            "email_not_verified": "L'email n'est pas vérifié"
         },
         "pagination": {
             "previous": "&laquo; Précédent",
@@ -1314,3 +1326,5 @@
         }
     }
 }
+
+})));
