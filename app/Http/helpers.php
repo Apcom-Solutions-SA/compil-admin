@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Barryvdh\TranslationManager\Models\Translation;
 
 
 if (!function_exists('random_key')) {
@@ -17,5 +18,17 @@ if (!function_exists('random_key')) {
             $str .= $keyspace[random_int(0, $max)];
         }
         return $str;
+    }
+}
+
+if (!function_exists('getLocales')) {
+    // get locals from table of translation manager, so that admin can set locales          
+    function getLocales()
+    {
+        $locales = array_merge(
+            [config('app.locale')],
+            Translation::groupBy('locale')->pluck('locale')->toArray()
+        );
+        return  array_unique($locales);
     }
 }

@@ -10,8 +10,8 @@ class Page extends Model
 {
     use HasFactory;
     use HasTranslations; 
-    public $translatable = ['title', 'introduction', 'content'];
     protected $fillable = ['active', 'footer', 'group_id', 'title', 'introduction', 'content'];
+    public $translatable = ['title', 'introduction', 'content'];
     public $timestamps = false;
     protected $attributes = [
         'active' => 1,

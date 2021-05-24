@@ -60,9 +60,20 @@ class NoteController extends Controller
             //   'group_id' => 'nullable|exists:groups,id',
         ]);
 
-        $note = Note::create($request->only(['title', 'introduction', 'content']) + ['user_id' => $request->user()->id]);
+        $note = Note::create($request->only(['title', 'introduction']) + ['user_id' => $request->user()->id]);
 
-        if ($request->tags){
+        // translable attributes
+        $locales = getLocales();
+        foreach ($note->translatable as $attribute) {
+            $value = [];
+            foreach ($locales as $locale) {
+                $value = $request->input($attribute . '_' . $locale);
+                if ($value) $note->setTranslation($attribute, $locale, $value);
+            }
+        }
+        $note->save();
+
+        if ($request->tags) {
             $note->attachTags($request->tags);
         }
 
@@ -82,7 +93,7 @@ class NoteController extends Controller
     public function show(Request $request, int $id)
     {
         $note = Note::with(['user'])->find($id);
-        $tags = $note->tags; 
+        $tags = $note->tags;
         return response()->json([
             'note' => $note,
             'tags' => $tags,
@@ -96,11 +107,29 @@ class NoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Note $note)
-    {        
-        $note->update($request->only(['title', 'introduction', 'content']));
-        if ($request->tags){            
+    {
+        $note->update($request->only(['title', 'introduction']));
+
+        // tags
+        if ($request->tags) {
             $note->syncTags($request->tags);
         }
+
+        // translable attributes
+        $locales = getLocales();
+        foreach ($note->translatable as $attribute) {
+            $value = [];
+            foreach ($locales as $locale) {
+                $value = $request->input($attribute . '_' . $locale);
+                if ($value) $note->setTranslation($attribute, $locale, $value);
+            }
+        }
+        $note->save();
+
+        if ($request->tags) {
+            $note->attachTags($request->tags);
+        }
+
         return response()->json([
             'note' => $note,
         ]);

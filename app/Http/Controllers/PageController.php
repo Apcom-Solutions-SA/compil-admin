@@ -7,20 +7,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use App\Models\Page;
 use App\Models\Group;
-use Barryvdh\TranslationManager\Models\Translation;
-
 
 class PageController extends Controller
 {
-    // get locals from table of translation manager, so that admin can set locales          
-    public function getLocales()
-    {
-        $locales = array_merge(
-            [config('app.locale')],
-            Translation::groupBy('locale')->pluck('locale')->toArray()
-        );
-        return  array_unique($locales);
-    }
+
 
     public function list_api()
     {
@@ -34,7 +24,7 @@ class PageController extends Controller
             'title' => "Pages",
             'page' => 'pages',
             'groups' => $groups,
-            'locales' => $this->getLocales()
+            'locales' => getLocales()
         ]);
     }
 
@@ -69,7 +59,7 @@ class PageController extends Controller
         $page = new Page();
 
         // translable attributes
-        $locales = $this->getLocales();
+        $locales = getLocales();
         foreach ($page->translatable as $attribute) {
             $value = [];
             foreach ($locales as $locale) {
@@ -103,7 +93,7 @@ class PageController extends Controller
     {
         $page->update($request->only(['active', 'footer']));
         // translable attributes
-        $locales = $this->getLocales();
+        $locales = getLocales();
         foreach ($page->translatable as $attribute) {
             $value = [];
             foreach ($locales as $locale) {

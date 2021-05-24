@@ -33,7 +33,7 @@
       >
         <a
           data-toggle="tab"
-          :href="'#content_' + locale"
+          :href="'#tab_' + locale"
           class="nav-link text-uppercase"
           :class="{ active : index==0 }"
         >{{ locale }}</a>
@@ -44,7 +44,7 @@
       <div
         v-for="(locale, index) of locales"
         :key="locale"
-        :id="'content_' + locale"
+        :id="'tab_' + locale"
         class="tab-pane fade"
         :class="{ show : index==0, active: index==0}"
       >
@@ -104,7 +104,6 @@ export default {
   created() {
     if (this.mode == 'edit') {
       this.item = this.item_edit;
-      console.log(this.item_edit);
       for (const translatable of this.translatables) {
         for (const locale of this.locales) {
           if (this.item[translatable] && this.item[translatable][locale]){
