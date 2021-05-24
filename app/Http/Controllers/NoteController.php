@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Group;
 use App\Models\Note;
+use App\Filters\NoteFilters;
+// use Spatie\Tags\Tag;
 
 class NoteController extends Controller
 {
@@ -19,32 +21,22 @@ class NoteController extends Controller
         ]);
     }
 
-    public function index_api(Request $request)
+    public function index_api(Request $request,  NoteFilters $filters)
     {
-        $notes = Note::orderBy('id', 'desc');
-
-        if ($request->search) {
-            $search = $request->search;
-            $notes->where(function ($query) use ($search) {
-                $query->where('title', 'LIKE', '%' . $search . '%')
-                    ->orWhere('content', 'LIKE', '%' . $search . '%');
-            });
-        }
-
-        if ($request->group_id > 0) {
-            $notes->where('group_id', $request->group_id);
-        }
-
+        $notes = Note::orderBy('updated_at', 'desc')->filter($filters);
         $per_note = $request->per_note ?? setting('admin.per_page');
         return $notes->paginate($per_note);
     }
 
-    public function index_user(Request $request)
+    /** 
+     * Afficher les dernières notes en fonction de (dernière modification) plus récents
+     */
+    public function index_user(Request $request, NoteFilters $filters)
     {
         $user = $request->user();
-        $notes = Note::orderBy('id', 'desc')->where('user_id', $user->id);
+        $notes = Note::orderBy('updated_at', 'desc')->filter($filters);
 
-        $per_note = $request->per_note ?? setting('admin.per_page');
+        $per_note = $request->per_note ?? setting('site.per_page');
         return $notes->paginate($per_note);
     }
 

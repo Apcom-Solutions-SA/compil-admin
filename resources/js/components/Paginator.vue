@@ -32,7 +32,8 @@
       </a>
     </li>
     <li
-      v-for="n in this.pageRange"
+      v-for="n in pageRange"
+      :key="n"
       style="margin-right:3px;"
     >
       <span
