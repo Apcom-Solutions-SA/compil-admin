@@ -49,7 +49,7 @@ class NoteController extends Controller
         // for search, filter according to user setting
         if ($request->search){
             $user_setting = UserSetting::where('user_id', $user->id)->first(); 
-            if ($user_setting->set_min){
+            if ($user_setting?->set_min){
                 $min = $user_setting->min; 
                 // Todo filter authors 
             }
