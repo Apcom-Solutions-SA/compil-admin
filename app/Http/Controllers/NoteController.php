@@ -14,6 +14,11 @@ use App\Models\UserSetting;
 
 class NoteController extends Controller
 {
+    public function encrypt(){
+        return SODIUM_LIBRARY_VERSION; 
+    }
+
+
     public function index()
     {
         $groups = Group::where('table_name', 'notes')->orderBy('name')->get(['id', 'name']);
@@ -75,7 +80,7 @@ class NoteController extends Controller
             //   'group_id' => 'nullable|exists:groups,id',
         ]);
 
-        $note = Note::create($request->only(['title', 'introduction']) + ['user_id' => $request->user()->id]);
+        $note = Note::create($request->only(['title', 'introduction', 'key']) + ['user_id' => $request->user()->id]);
 
         // translable attributes
         $locales = getLocales();
@@ -83,7 +88,14 @@ class NoteController extends Controller
             $value = [];
             foreach ($locales as $locale) {
                 $value = $request->input($attribute . '_' . $locale);
-                if ($value) $note->setTranslation($attribute, $locale, $value);
+                if ($value) {
+                    $key = $request->key; 
+                    if ($key && strlen($key)>0 ){
+
+
+                    }
+                    $note->setTranslation($attribute, $locale, $value);
+                }
             }
         }
         $note->save();
@@ -120,9 +132,16 @@ class NoteController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * 
+     * The HTTP 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it. This status is similar to 401 , but in this case, re-authenticating will make no difference.
      */
     public function update(Request $request, Note $note)
     {
+        if ($request->user()->id === $note->user_id) {
+            return response()->json([
+                'message' => __('front.permission_denied')
+            ], 403);
+        }
         $note->update($request->only(['title', 'introduction']));
 
         // tags
