@@ -55,6 +55,10 @@ class NoteController extends Controller
             }
         }
 
+        if ($request->hide_others){
+            $notes->where('user_id', $user->id); 
+        }
+
         $per_note = $request->per_note ?? setting('site.per_page');
         return $notes->paginate($per_note);
     }

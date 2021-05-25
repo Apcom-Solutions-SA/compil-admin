@@ -14,3 +14,4 @@ npm-debug.log
 yarn-error.log
 /database/*.sql
 /resources/lang
+/public/js/vue-i18n-locales.generated.js
