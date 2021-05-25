@@ -14,7 +14,7 @@ class PageController extends Controller
 
     public function list_api()
     {
-        return  Page::orderBy('id')->get(['id', 'title', 'content', 'active', 'group_id', 'footer']);
+        return  Page::orderBy('id')->get();
     }
 
     public function index()
