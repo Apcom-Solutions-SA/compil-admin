@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Models\Group;
 use App\Models\Note;
 use App\Filters\NoteFilters;
+use App\Models\UserRelation; 
+use App\Models\UserSetting; 
 // use Spatie\Tags\Tag;
 
 class NoteController extends Controller
@@ -32,9 +35,25 @@ class NoteController extends Controller
      * Afficher les dernières notes en fonction de (dernière modification) plus récents
      */
     public function index_user(Request $request, NoteFilters $filters)
-    {
-        $user = $request->user();
+    {        
         $notes = Note::orderBy('updated_at', 'desc')->filter($filters);
+
+        // filter blocked
+        $user = $request->user();
+        $blocked = UserRelation::where([
+            'subject_id' => $user->id, 
+            'block' => 1
+        ])->pluck('object_id'); 
+        $notes->whereNotIn('user_id', $blocked); 
+
+        // for search, filter according to user setting
+        if ($request->search){
+            $user_setting = UserSetting::where('user_id', $user->id)->first(); 
+            if ($user_setting->set_min){
+                $min = $user_setting->min; 
+                // Todo filter authors 
+            }
+        }
 
         $per_note = $request->per_note ?? setting('site.per_page');
         return $notes->paginate($per_note);
