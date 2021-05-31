@@ -27,15 +27,18 @@ class NoteFilters extends Filters
             $query->where('title', 'LIKE', '%' . $search . '%')
                 ->orWhere('reference', 'LIKE', '%' . $search . '%')
                 ->orWhere('content', 'LIKE', '%' . $search . '%')
+                ->orWhere('tags', 'LIKE', '%' . $search . '%')
                 // user 
                 ->orWhereHas('user', function ($q) use ($search) {
                     return $q->where('id', $search);  // change to public key later
-                })
+                }); 
                 // tag
+                /*
                 ->orWhereHas('tags', function ($q) use ($search) {
                     $tagIds = Tag::where('name', 'LIKE', '%' . $search . '%')->pluck('id');
                     $q->whereIn('tags.id', $tagIds);
                 });
+                */
         });
     }
 
