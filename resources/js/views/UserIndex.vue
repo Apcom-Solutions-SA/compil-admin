@@ -29,7 +29,7 @@
             <th>{{ $t('admin.key_public') }}</th>
             <th>{{ $t('admin.key_parent') }}</th>
           </template>
-          <th>Active</th>
+          <th>{{ $t('admin.verified')}}</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -46,13 +46,7 @@
             <td>{{ item.key_parent }}</td>
           </template>
           <td>
-            <switches
-              v-model="item.active"
-              :emit-on-mount="false"
-              @input="updateAttribute(`/users/${item.id}`, 'active', $event)"
-              theme="bootstrap"
-              :color="color_switch(item.active)"
-            ></switches>
+            {{ item.email_verified_at }}
           </td>
           <td>
             <i

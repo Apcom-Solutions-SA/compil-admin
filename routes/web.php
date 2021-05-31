@@ -13,18 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
 
+Route::get('/', function () {
+    return view('welcome');
+});
 
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes([
     'register' => false, 

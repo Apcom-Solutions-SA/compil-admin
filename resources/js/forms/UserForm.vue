@@ -14,7 +14,7 @@
       >
     </div>
 
-    <template v-if="role_id==2">
+    <template v-if="role_id==1">
       <div class="form-group row">
         <label
           for="password"

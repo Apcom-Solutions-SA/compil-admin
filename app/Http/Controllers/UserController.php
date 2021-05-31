@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
+    /**
+     * add user from compil 
+     */
     public function email(Request $request)
     {        
         // create user         
@@ -29,6 +32,7 @@ class UserController extends Controller
         $user = User::create($request->except(['password']) + [
             'email' => $request->email,
             'password' => Hash::make($key), 
+            'role_id' => 3,  // 
             'active' => 0,
         ]);
 
@@ -55,7 +59,7 @@ class UserController extends Controller
         return view('users.index', [
             'title' => trans('admin.admins'),
             'page' => 'admins',
-            'role_id' => 2,
+            'role_id' => 1,
             'groups' => $groups,
             'id' => $request->id ?? 0,
         ]);
@@ -76,7 +80,7 @@ class UserController extends Controller
     public function index_api(Request $request)
     {
         $role_id = $request->role_id;
-        if ($role_id == 2) {
+        if ($role_id == 1) {
             $users = User::whereIn('role_id', [1, 2])->orderBy('id', 'desc');   // employees
         }
         if ($role_id == 3) {
@@ -87,7 +91,6 @@ class UserController extends Controller
 
             $users->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', '%' . $search . '%')
-                    ->orWhere('family_name', 'LIKE', '%' . $search . '%')
                     ->orWhere('email', 'LIKE', '%' . $search . '%');
             });
         }

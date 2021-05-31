@@ -61,6 +61,6 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 
     public function isAdmin()
     {
-        return ($this->role_id <= 2);  // admin middleware
+        return ($this->role_id == 1);  // admin middleware
     }
 }
