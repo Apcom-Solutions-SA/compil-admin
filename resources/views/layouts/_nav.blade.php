@@ -22,7 +22,6 @@
                 <!-- Authentication Links -->
                 @guest
                     <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                    <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
                 @else
                     <li class="nav-link">
                         {{ Auth::user()->name }}
