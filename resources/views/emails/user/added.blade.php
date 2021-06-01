@@ -1,7 +1,10 @@
 @component('mail::message')
 
-{{__('front.user_added_message')}}:
-{{ $key }}
+{{__('front.user_added_id')}}:
+{{ $public_id }}
+
+{{__('front.user_added_password')}}:
+{{ $password }}
 
 {{__('Please log in once via this url to validate your account.')}}
 @component('mail::button', ['url' => $url])

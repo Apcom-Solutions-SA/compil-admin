@@ -2,7 +2,7 @@
 
 namespace App\Filters;
 
-use Spatie\Tags\Tag;
+use App\Models\User;
 
 class NoteFilters extends Filters
 {
@@ -12,7 +12,7 @@ class NoteFilters extends Filters
      * @var array
      */
     protected $filters = [
-        'search', 'author_id'
+        'search', 'author_id', 'author_public_id'
     ];
 
     /**
@@ -45,5 +45,11 @@ class NoteFilters extends Filters
     protected function author_id($user_id)
     {
         return $this->builder->where('user_id', $user_id); 
+    }
+
+    protected function author_public_id($public_id)
+    {
+        $user = User::where('public_id', $public_id)->first(); 
+        return $this->builder->where('user_id', $user->id); 
     }
 }

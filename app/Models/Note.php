@@ -13,7 +13,7 @@ class Note extends Model
     use HasFactory, HasTranslations;
 
     protected $fillable = ['title', 'introduction', 'content', 'user_id', 'reference', 'tags', 'key', 'encryption_key', 'nonce'];
-    public $translatable = ['title', 'content', 'tags'];
+    public $translatable = ['title', 'introduction', 'content', 'tags'];
 
     /**
      * The attributes that should be hidden for arrays.

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Log;
 
 /*
  * Tutorial: https://blog.pusher.com/web-application-laravel-vue-part-2/
@@ -13,10 +16,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
     // auth for api token
-    public function login()
+    public function login(Request $request)
     {
-        // Impossible de s connecter avec une clé secrète valable si le compte est not verified.
+        // Impossible de se connecter avec une clé secrète valable si le compte est not verified.
+        // unless for email verification
         $email = request('email'); 
         $user = User::where('email', $email)->first(); 
         if (is_null($user)) {
@@ -25,7 +30,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if (is_null($user->email_verified_at)) {
+        if (is_null($user->email_verified_at) && is_null($request->hash)) {
             return response()->json([
                 'message' => __('front.email_not_verified')
             ], 401);
@@ -38,11 +43,29 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            $email = Auth::user()->email;
-            $token = Auth::user()->createToken($email)->accessToken;
+            $user = Auth::user(); 
+            if ($request->hash && ! $user->hasVerifiedEmail()){
+                if (! hash_equals((string) $request->id, (string) $user->getKey())) {
+                    throw new AuthorizationException;
+                }                
+                if (! hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
+                    throw new AuthorizationException;
+                }
+                $user->markEmailAsVerified(); 
+            }
+
+            $token = $user->createToken($user->email)->accessToken;
+            
+            $blockedIds = DB::table('user_relations')->where([
+                'subject_id' => $user->id, 
+                'block' => 1
+            ])->pluck('object_id'); 
+            $blockedPids = User::whereIn('id', $blockedIds)->pluck('public_id'); 
+
             return response()->json([
                 'token' => $token, 
-                'user' => Auth::user()
+                'user' => $user,
+                'blockedPids' => $blockedPids
             ]);
         }
 

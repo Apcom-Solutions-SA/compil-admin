@@ -57,7 +57,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     // locales
     Route::get('/locales', 'PageController@getLocales'); 
 
-    Route::get('/test', 'NoteController@encrypt'); 
+    Route::get('/test', 'UserController@test'); 
 });
 
 // Settings

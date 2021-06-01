@@ -14,7 +14,7 @@ class UserRelationController extends Controller
             $attribute => 1
         ])->pluck('object_id'); 
 
-        $objects = User::whereIn('id', $objects_id)->get();
+        $objects = User::whereIn('id', $objects_id)->get(['id', 'public_id']);
         return $objects; 
     }
 
@@ -22,11 +22,16 @@ class UserRelationController extends Controller
     {
         $request->validate([
             'subject_id' => 'required|exists:users,id',
-            'object_id' => 'required|exists:users,id',
+            'object_id' => 'nullable|exists:users,id',
+            'object_public_id' => 'nullable|exists:users,public_id',
             'attribute' => 'required|string'
         ]);
 
         $object_id = $request->object_id; 
+        if (!$object_id){
+            $object = User::where('public_id', $request->object_public_id)->first(); 
+            $object_id = $object->id;             
+        }
 
         $relation = UserRelation::firstOrCreate([
             'subject_id' => $request->subject_id,
@@ -34,6 +39,7 @@ class UserRelationController extends Controller
         ]);
 
         $attribute = $request->attribute;
+
         if (!($relation[$attribute])) {
             $relation[$attribute] = 1;
             $relation->save();
@@ -48,16 +54,24 @@ class UserRelationController extends Controller
     {
         $request->validate([
             'subject_id' => 'required|exists:users,id',
-            'object_id' => 'required|exists:users,id',
+            'object_id' => 'nullable|exists:users,id',
+            'object_public_id' => 'nullable|exists:users,public_id',
             'attribute' => 'required|string'
         ]);
 
+        $object_id = $request->object_id; 
+        if (!$object_id){
+            $object = User::where('public_id', $request->object_public_id)->first(); 
+            $object_id = $object->id;             
+        }
+
         $relation = UserRelation::firstOrCreate([
             'subject_id' => $request->subject_id,
-            'object_id' => $request->object_id
+            'object_id' => $object_id
         ]);
 
         $attribute = $request->attribute;
+
         if ($relation){
             $relation[$attribute] = 0; 
             $relation->save();

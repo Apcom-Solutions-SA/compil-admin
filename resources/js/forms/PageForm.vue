@@ -58,7 +58,7 @@
             class="form-control"
             type="text"
             :id="'title_' + locale"
-            v-model="item['title_' + locale]"
+            v-model="item.title[locale]"
           >
         </div>
 
@@ -70,14 +70,14 @@
             :id="'introduction_'+locale"
             type="text"
             class="form-control"
-            v-model="item['introduction_'+locale]"
+            v-model="item.introduction[locale]"
           >
         </div>
 
         <!-- content -->
         <div class="form-group">
           <label :for="'content_'+locale">{{ $t('admin.content', locale) }}</label>
-          <tip-tap v-model="item['content_'+locale]" />
+          <tip-tap v-model="item.content[locale]" />
         </div>
       </div>
     </div>
@@ -98,7 +98,11 @@ export default {
   props: ['groups', 'mode', 'item_edit', 'locales', 'translatables'],
   data() {
     return {
-      item: {},
+      item: {
+        title: {}, 
+        introduction: {},
+        content: {},
+      },
     }
   },
   created() {

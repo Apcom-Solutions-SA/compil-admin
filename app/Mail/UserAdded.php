@@ -11,8 +11,8 @@ class UserAdded extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $key;
-
+    protected $password;
+    public $public_id; 
     public $url;
 
     /**
@@ -20,9 +20,10 @@ class UserAdded extends Mailable
      *
      * @return void
      */
-    public function __construct(string $key, string $url)
+    public function __construct(string $password, string $public_id, string $url)
     {
-        $this->key = $key; 
+        $this->password = $password; 
+        $this->public_id = $public_id; 
         $this->url = $url;
     }
 
@@ -36,7 +37,8 @@ class UserAdded extends Mailable
         return $this
             ->subject('New user')
             ->markdown('emails.user.added',[
-            'key' => $this->key,
+            'password' => $this->password,
+            'public_id' => $this->public_id,
             'url' => $this->url
         ]);
     }

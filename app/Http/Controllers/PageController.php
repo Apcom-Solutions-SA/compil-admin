@@ -60,10 +60,9 @@ class PageController extends Controller
 
         // translable attributes
         $locales = getLocales();
-        foreach ($page->translatable as $attribute) {
-            $value = [];
+        foreach ($page->translatable as $attribute) {            
             foreach ($locales as $locale) {
-                $value = $request->input($attribute . '_' . $locale);
+                $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) $page->setTranslation($attribute, $locale, $value);
             }
         }
@@ -94,10 +93,9 @@ class PageController extends Controller
         $page->update($request->only(['active', 'footer']));
         // translable attributes
         $locales = getLocales();
-        foreach ($page->translatable as $attribute) {
-            $value = [];
+        foreach ($page->translatable as $attribute) {            
             foreach ($locales as $locale) {
-                $value = $request->input($attribute . '_' . $locale);
+                $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) $page->setTranslation($attribute, $locale, $value);
             }
         }

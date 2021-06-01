@@ -76,7 +76,7 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        $note = Note::create($request->only(['introduction', 'key']) + ['user_id' => $request->user()->id]);
+        $note = Note::create($request->only(['key']) + ['user_id' => $request->user()->id]);
         // translable attributes
         $locales = getLocales();
         foreach ($note->translatable as $attribute) {
@@ -110,9 +110,9 @@ class NoteController extends Controller
         ]);
     }
 
-    public function show(Request $request, int $id)
+    public function show(Request $request, string $reference)
     {
-        $note = Note::with(['user'])->find($id);
+        $note = Note::with(['user'])->where('reference', $reference)->first();
         return response()->json([
             'note' => $note
         ]);
@@ -126,15 +126,14 @@ class NoteController extends Controller
      * 
      * The HTTP 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it. This status is similar to 401 , but in this case, re-authenticating will make no difference.
      */
-    public function update(Request $request, Note $note)
+    public function update(Request $request, int $id)
     {
+        $note = Note::find($id); 
         if ($request->user()->id != $note->user_id) {
             return response()->json([
                 'message' => __('front.permission_denied')
             ], 403);
         }
-        $note->update($request->only(['introduction']));
-
         // translable attributes
         $locales = getLocales();
         foreach ($note->translatable as $attribute) {
@@ -159,8 +158,9 @@ class NoteController extends Controller
      * Remove the specified resource from storage.
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Note $note)
+    public function destroy(int $id)
     {
+        $note = Note::find($id); 
         $note->delete();
         return response()->json([
             'status' => 'success',

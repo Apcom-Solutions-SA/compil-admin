@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Group;
-use App\Mail\UserAdded; 
+use App\Mail\UserAdded;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\URL;
@@ -17,23 +17,40 @@ use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
+    public function test()
+    {
+        $users = User::whereNull('public_id')->get(); 
+        foreach ($users as $user){
+            $user->public_id = md5($user->email);
+            $user->update();
+        }         
+    }
     /**
      * add user from compil 
      */
     public function email(Request $request)
-    {        
+    {
         // create user         
         $request->validate([
             'email' => 'required|email|unique:users',
-        ]);        
-        
-        $key = random_key();
-                   
+        ]);
+
+        $password = random_key();  // defined in helper
+
+        $email = strtolower($request->email);
+        $public_id = md5($email);
+        $parent_user = $request->user();
+        if (!$parent_user->public_id) {
+            $parent_user->public_id = md5($parent_user->email);
+            $parent_user->save();
+        }
+
         $user = User::create($request->except(['password']) + [
-            'email' => $request->email,
-            'password' => Hash::make($key), 
+            'email' => $email,
+            'password' => Hash::make($password),
             'role_id' => 3,  // 
-            'active' => 0,
+            'public_id' => $public_id,
+            'parent' => $parent_user->public_id
         ]);
 
         // get verification url 
@@ -45,7 +62,13 @@ class UserController extends Controller
                 'hash' => sha1($user->getEmailForVerification()),
             ]
         );
-        Mail::to($user)->send(new UserAdded($key, $url));        
+
+        $parsed_url = parse_url($url); 
+        if (! $parsed_url) return response()->json(['message' => 'failed to parse url'], 500); 
+        $new_url = config('app.front_url').$parsed_url['path'].'?'.$parsed_url['query']; 
+
+
+        Mail::to($user)->send(new UserAdded($password, $public_id, $new_url));
 
         return response()->json([
             'status' => 'success'
@@ -165,5 +188,4 @@ class UserController extends Controller
             'status' => 'success',
         ]);
     }
-
 }

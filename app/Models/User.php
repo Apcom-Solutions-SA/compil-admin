@@ -23,9 +23,8 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'password',
         'role_id',
         'active', 
-        'key_private',
-        'key_public', 
-        'key_parent', 
+        'public_id', 
+        'parent', 
     ];
 
     /**
@@ -36,7 +35,6 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
-        'key_private'
     ];
 
     /**
@@ -56,11 +54,11 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 
     public function isSuperAdmin()
     {
-        return $this->email == 'it@apcom.ch';  // admin middleware
+        return $this->email === 'fen.zheng@apcom.ch';  // admin middleware
     }
 
     public function isAdmin()
     {
-        return ($this->role_id == 1);  // admin middleware
+        return ($this->role_id === 1);  // admin middleware
     }
 }
