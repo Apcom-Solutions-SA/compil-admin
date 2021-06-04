@@ -25,7 +25,6 @@
           <th>ID</th>
           <th>{{ $t('admin.email') }}</th>
           <template v-if="role_id==3">
-            <th>{{ $t('admin.key_private') }}</th>
             <th>{{ $t('admin.key_public') }}</th>
             <th>{{ $t('admin.key_parent') }}</th>
           </template>
@@ -41,9 +40,8 @@
           <td>{{ item.id }}</td>
           <td>{{ item.email}}</td>
           <template v-if="role_id==3">
-            <td>{{ item.key_private }}</td>
-            <td>{{ item.key_public }}</td>
-            <td>{{ item.key_parent }}</td>
+            <td>{{ item.public_id }}</td>
+            <td>{{ item.parent }}</td>
           </template>
           <td>
             {{ item.email_verified_at }}

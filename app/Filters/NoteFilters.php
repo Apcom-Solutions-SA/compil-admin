@@ -20,20 +20,24 @@ class NoteFilters extends Filters
      *
      * @param  string $username
      * @return \Illuminate\Database\Eloquent\Builder
+     * 
+     * Moteur de recherche
+     * Doit être pertinent sur des recherches de: titres, intro, tags, ID notes, clé public autheur
      */
     protected function search($search)
     {
         return $this->builder->where(function ($query) use ($search) {
             $query->where('title', 'LIKE', '%' . $search . '%')
+                ->orWhere('introduction', 'LIKE', '%' . $search . '%')
                 ->orWhere('reference', 'LIKE', '%' . $search . '%')
                 ->orWhere('content', 'LIKE', '%' . $search . '%')
                 ->orWhere('tags', 'LIKE', '%' . $search . '%')
                 // user 
                 ->orWhereHas('user', function ($q) use ($search) {
-                    return $q->where('id', $search);  // change to public key later
-                }); 
-                // tag
-                /*
+                    return $q->where('public_id', $search); 
+                });
+            // tag
+            /*
                 ->orWhereHas('tags', function ($q) use ($search) {
                     $tagIds = Tag::where('name', 'LIKE', '%' . $search . '%')->pluck('id');
                     $q->whereIn('tags.id', $tagIds);
@@ -44,12 +48,12 @@ class NoteFilters extends Filters
 
     protected function author_id($user_id)
     {
-        return $this->builder->where('user_id', $user_id); 
+        return $this->builder->where('user_id', $user_id);
     }
 
     protected function author_public_id($public_id)
     {
-        $user = User::where('public_id', $public_id)->first(); 
-        return $this->builder->where('user_id', $user->id); 
+        $user = User::where('public_id', $public_id)->first();
+        return $this->builder->where('user_id', $user->id);
     }
 }

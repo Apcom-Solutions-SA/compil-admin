@@ -87,7 +87,8 @@ class NoteController extends Controller
                         // Generating an encryption key and a nonce
                         $key   = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES); // 256 bit
                         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES); // 24 bytes
-                        $value = sodium_crypto_secretbox($value, $nonce, $key);
+                        $ciphertext  = sodium_crypto_secretbox($value, $nonce, $key);
+                        Log::info($ciphertext ); 
                         $note->encryption_key = $key; 
                         $note->nonce = $nonce; 
                     }
@@ -141,7 +142,13 @@ class NoteController extends Controller
                 $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) {
                     if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
-                        // TODO encrypt
+                        $key   = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES); // 256 bit
+                        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES); // 24 bytes
+                        $ciphertext  = sodium_crypto_secretbox($value, $nonce, $key);
+                        Log::info($value); 
+                        Log::info($ciphertext ); 
+                        $note->encryption_key = $key; 
+                        $note->nonce = $nonce; 
                     }
                     $note->setTranslation($attribute, $locale, $value);
                 }
