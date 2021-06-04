@@ -54,18 +54,11 @@ class AuthController extends Controller
                 $user->markEmailAsVerified(); 
             }
 
-            $token = $user->createToken($user->email)->accessToken;
+            $token = $user->createToken($user->email)->accessToken;  
             
-            $blockedIds = DB::table('user_relations')->where([
-                'subject_id' => $user->id, 
-                'block' => 1
-            ])->pluck('object_id'); 
-            $blockedPids = User::whereIn('id', $blockedIds)->pluck('public_id'); 
-
             return response()->json([
                 'token' => $token, 
                 'user' => $user,
-                'blockedPids' => $blockedPids
             ]);
         }
 

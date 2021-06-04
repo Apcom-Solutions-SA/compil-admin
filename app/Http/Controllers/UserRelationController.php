@@ -15,7 +15,9 @@ class UserRelationController extends Controller
         ])->pluck('object_id'); 
 
         $objects = User::whereIn('id', $objects_id)->get(['id', 'public_id']);
-        return $objects; 
+        return response()->json([
+            'objects' => $objects
+        ]); 
     }
 
     public function add(Request $request)
