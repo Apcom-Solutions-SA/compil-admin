@@ -12,7 +12,7 @@ class NoteFilters extends Filters
      * @var array
      */
     protected $filters = [
-        'search', 'author_id', 'author_public_id'
+        'search', 'author_id', 'public_id', 'tag', 'reference'
     ];
 
     /**
@@ -46,12 +46,20 @@ class NoteFilters extends Filters
         });
     }
 
+    protected function tag(string $tag){
+        return $this->builder->where('tags', 'LIKE', '%' . $tag . '%'); 
+    }
+
+    protected function reference(string $reference){
+        return $this->builder->where('reference', $reference); 
+    }
+
     protected function author_id($user_id)
     {
         return $this->builder->where('user_id', $user_id);
     }
 
-    protected function author_public_id($public_id)
+    protected function public_id($public_id)
     {
         $user = User::where('public_id', $public_id)->first();
         return $this->builder->where('user_id', $user->id);
