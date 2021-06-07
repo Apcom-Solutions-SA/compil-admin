@@ -10,16 +10,63 @@ use App\Models\Note;
 use App\Filters\NoteFilters;
 use App\Models\UserRelation;
 use App\Models\UserSetting;
+use Illuminate\Support\Collection;
+
 // use Spatie\Tags\Tag;
 
 class NoteController extends Controller
 {
+    // https://www.geeksforgeeks.org/how-to-encrypt-and-decrypt-a-php-string/
+    protected $ciphering = "AES-128-CTR";
+    protected $options = 0;
 
-    public function encrypt()
+    public function test()
     {
         return SODIUM_LIBRARY_VERSION;
     }
 
+    public function check_key(int $id, Request $request)
+    {
+        $note = Note::find($id);
+        if (!$note) return response()->json([
+            'message' => trans('front.object_not_found')
+        ], 404);
+
+        if (!$request->key) return response()->json([
+            'message' => trans('front.decryption_key_is_required')
+        ], 400);
+
+        if ($request->key !== $note->key) return response()->json([
+            'message' => trans('front.decryption_key_is_incorrect')
+        ], 403);
+
+        $content = $this->decrypt_content($note);
+        return response()->json([
+            'content' => collect($content)
+        ]);
+    }
+
+    protected function decrypt_content(Note $note): Collection
+    {
+        $content = [];
+        $locales = getLocales();
+        foreach ($locales as $locale) {
+            $encryption = $note->getTranslation('content', $locale);  // string
+            if ($encryption) {
+                $decryption = openssl_decrypt(
+                    $encryption,
+                    $this->ciphering,
+                    $note->encryption_key,
+                    $this->options,
+                    $note->iv
+                );
+                if ($decryption) {
+                    $content[$locale] = $decryption;
+                }
+            }
+        }
+        return collect($content);
+    }
 
     public function index()
     {
@@ -77,15 +124,35 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        $note = Note::create($request->only(['key']) + ['user_id' => $request->user()->id]);
+        $note = Note::create(['user_id' => $request->user()->id]);
         // translable attributes
         $locales = getLocales();
         foreach ($note->translatable as $attribute) {
+            if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
+                // Use OpenSSl encryption method
+                $iv_length = openssl_cipher_iv_length($this->ciphering);
+                // Use random_bytes() function which gives randomly 16 digit values
+                $encryption_iv = random_bytes($iv_length);
+                $encryption_key = openssl_digest($request->key, 'MD5', TRUE);
+                $note->key = $request->key;
+                $note->encryption_key = $encryption_key;
+                $note->iv = $encryption_iv;
+            }
             foreach ($locales as $locale) {
                 $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) {
                     if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
-                        $ciphering = "BF-CBC";
+                        // encryption                        
+                        $encryption = openssl_encrypt(
+                            $value,
+                            $this->ciphering,
+                            $encryption_key,
+                            $this->options,
+                            $encryption_iv
+                        );
+                        if ($encryption) {
+                            $value = $encryption;
+                        }
                     }
                     $note->setTranslation($attribute, $locale, $value);
                 }
@@ -109,9 +176,16 @@ class NoteController extends Controller
     public function show(Request $request, string $reference)
     {
         $note = Note::with(['user'])->where('reference', $reference)->first();
-        return response()->json([
+        $data = [
             'note' => $note
-        ]);
+        ];
+
+        if ($request->with_key && $request->user()->id === $note->user_id && $note->key) {
+            $data['key'] = $note->key;
+            $data['content'] = $this->decrypt_content($note);
+        }
+
+        return response()->json($data);
     }
 
     /**
@@ -133,33 +207,33 @@ class NoteController extends Controller
         // translable attributes
         $locales = getLocales();
         foreach ($note->translatable as $attribute) {
+            if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
+                // Use OpenSSl encryption method
+                $iv_length = openssl_cipher_iv_length($this->ciphering);
+                // Use random_bytes() function which gives randomly 16 digit values
+                $encryption_iv = random_bytes($iv_length);
+                $encryption_key = openssl_digest($request->key, 'MD5', TRUE);
+                $note->key = $request->key;
+                $note->encryption_key = $encryption_key;
+                $note->iv = $encryption_iv;
+            }
             foreach ($locales as $locale) {
                 $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) {
                     if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
                         // encryption
-                        $ciphering = "BF-CBC";
-
-                        // Use OpenSSl encryption method
-                        $iv_length = openssl_cipher_iv_length($ciphering);
-                        $options = 0;
-
-                        // Use random_bytes() function which gives
-                        // randomly 16 digit values
-                        $encryption_iv = random_bytes($iv_length);
-                        $key = $request->key;
-
-                        // Use openssl_encrypt() function to encrypt the data
                         $encryption = openssl_encrypt(
                             $value,
-                            $ciphering,
-                            $key,
-                            $options,
+                            $this->ciphering,
+                            $encryption_key,
+                            $this->options,
                             $encryption_iv
                         );
-                        Log::info($encryption); 
-                        if ($encryption) $value = $encryption; 
+                        if ($encryption) {
+                            $value = $encryption;
+                        }
                     }
+
                     $note->setTranslation($attribute, $locale, $value);
                 }
             }

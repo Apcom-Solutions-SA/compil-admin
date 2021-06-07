@@ -32,6 +32,8 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
     Route::patch('/notes/{id}', 'NoteController@update'); 
     Route::delete('/notes/{id}', 'NoteController@destroy');
 
+    Route::post('/notes/{id}/key', 'NoteController@check_key');
+
     Route::get('/user/{user_id}/relation/{attribute}', 'UserRelationController@index'); 
     Route::post('/user/relation/add', 'UserRelationController@add'); 
     Route::post('/user/relation/remove', 'UserRelationController@remove'); 

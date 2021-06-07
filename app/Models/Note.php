@@ -12,7 +12,7 @@ class Note extends Model
 {
     use HasFactory, HasTranslations;
 
-    protected $fillable = ['title', 'introduction', 'content', 'user_id', 'reference', 'tags', 'key', 'encryption_key', 'nonce'];
+    protected $fillable = ['title', 'introduction', 'content', 'user_id', 'reference', 'tags', 'key', 'encryption_key', 'iv'];
     public $translatable = ['title', 'introduction', 'content', 'tags'];
 
     /**
@@ -20,7 +20,14 @@ class Note extends Model
      *
      * @var array
      */
-    protected $hidden = ['key', 'encryption_key', 'nonce'];
+    protected $hidden = ['key', 'encryption_key', 'iv'];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['has_key'];
 
     // relationship 
     public function user()
@@ -38,5 +45,10 @@ class Note extends Model
     public function scopeFilter($query, NoteFilters $filters)
     {
         return $filters->apply($query);
+    }
+
+    public function getHasKeyAttribute()
+    {
+        return !!$this->key;
     }
 }
