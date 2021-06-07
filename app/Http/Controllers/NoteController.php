@@ -14,6 +14,7 @@ use App\Models\UserSetting;
 
 class NoteController extends Controller
 {
+
     public function encrypt()
     {
         return SODIUM_LIBRARY_VERSION;
@@ -84,13 +85,7 @@ class NoteController extends Controller
                 $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) {
                     if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
-                        // Generating an encryption key and a nonce
-                        $key   = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES); // 256 bit
-                        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES); // 24 bytes
-                        $ciphertext  = sodium_crypto_secretbox($value, $nonce, $key);
-                        Log::info($ciphertext ); 
-                        $note->encryption_key = $key; 
-                        $note->nonce = $nonce; 
+                        $ciphering = "BF-CBC";
                     }
                     $note->setTranslation($attribute, $locale, $value);
                 }
@@ -129,7 +124,7 @@ class NoteController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $note = Note::find($id); 
+        $note = Note::find($id);
         if ($request->user()->id != $note->user_id) {
             return response()->json([
                 'message' => __('front.permission_denied')
@@ -142,13 +137,28 @@ class NoteController extends Controller
                 $value = $request->input($attribute)[$locale] ?? null;
                 if ($value) {
                     if ($attribute == 'content' && $request->key && strlen($request->key) > 0) {
-                        $key   = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES); // 256 bit
-                        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES); // 24 bytes
-                        $ciphertext  = sodium_crypto_secretbox($value, $nonce, $key);
-                        Log::info($value); 
-                        Log::info($ciphertext ); 
-                        $note->encryption_key = $key; 
-                        $note->nonce = $nonce; 
+                        // encryption
+                        $ciphering = "BF-CBC";
+
+                        // Use OpenSSl encryption method
+                        $iv_length = openssl_cipher_iv_length($ciphering);
+                        $options = 0;
+
+                        // Use random_bytes() function which gives
+                        // randomly 16 digit values
+                        $encryption_iv = random_bytes($iv_length);
+                        $key = $request->key;
+
+                        // Use openssl_encrypt() function to encrypt the data
+                        $encryption = openssl_encrypt(
+                            $value,
+                            $ciphering,
+                            $key,
+                            $options,
+                            $encryption_iv
+                        );
+                        Log::info($encryption); 
+                        if ($encryption) $value = $encryption; 
                     }
                     $note->setTranslation($attribute, $locale, $value);
                 }
@@ -167,7 +177,7 @@ class NoteController extends Controller
      */
     public function destroy(int $id)
     {
-        $note = Note::find($id); 
+        $note = Note::find($id);
         $note->delete();
         return response()->json([
             'status' => 'success',

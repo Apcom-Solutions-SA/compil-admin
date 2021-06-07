@@ -62,6 +62,7 @@ class NoteFilters extends Filters
     protected function public_id($public_id)
     {
         $user = User::where('public_id', $public_id)->first();
-        return $this->builder->where('user_id', $user->id);
+        if ($user) return $this->builder->where('user_id', $user->id);
+        else return $this->builder; 
     }
 }
