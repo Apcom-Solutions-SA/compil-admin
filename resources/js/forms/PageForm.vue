@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       item: {
-        title: {}, 
+        title: {},
         introduction: {},
         content: {},
       },
@@ -108,14 +108,9 @@ export default {
   created() {
     if (this.mode == 'edit') {
       this.item = this.item_edit;
-      for (const translatable of this.translatables) {
-        for (const locale of this.locales) {
-          if (this.item[translatable] && this.item[translatable][locale]){
-            this.item[translatable + '_' + locale] = this.item[translatable][locale]; 
-          }
-        }
-      }
+      this.init_translatables();  
     }
+      
   },
   methods: {
     add() {
@@ -141,8 +136,14 @@ export default {
         }).catch(error => {
           flash(error.response.data, 'danger');
         });
-
     },
+
+    init_translatables() {
+      const translatables = ['title', 'introduction', 'content'];
+      for (const attribute of translatables) {
+        if (this.item[attribute] == null) this.item[attribute] = {};
+      }
+    }
   }
 };
 </script>
