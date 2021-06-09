@@ -50,9 +50,9 @@ class NoteController extends Controller
     {
         $content = [];
         $locales = getLocales();
-        foreach ($locales as $locale) {
-            $encryption = $note->getTranslation('content', $locale);  // string
-            if ($encryption) {
+        foreach ($locales as $locale) {                       
+            if ($note->hasTranslation('content', $locale)) {
+                $encryption = $note->getTranslation('content', $locale);  // string 
                 $decryption = openssl_decrypt(
                     $encryption,
                     $this->ciphering,
