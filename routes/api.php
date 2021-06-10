@@ -24,6 +24,8 @@ Route::group(['prefix' => 'v1'], function(){
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
     Route::post('/user/email', 'UserController@email');
+    Route::post('/email/verification-notification', 'UserController@send_verification_link'); 
+    
     Route::get('/list/pages', 'PageController@list_api'); 
 
     Route::get('/notes', 'NoteController@index_user'); 

@@ -122,7 +122,7 @@
       height="auto"
       :scrollable="true"
     >
-      <div class="modal-container">
+      <div class="p-3">
         <p>{{ $t('admin.delete_confirm')}}</p>
         <div class="text-right">
           <button

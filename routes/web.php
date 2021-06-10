@@ -44,8 +44,8 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admins', 'UserController@index_admins');
     Route::get('/clients', 'UserController@index_clients');
     Route::get('/api/users', 'UserController@index_api');
-    Route::resource('/users', 'UserController')->only(['store', 'update', 'desctroy']);
-
+    Route::resource('/users', 'UserController')->only(['store', 'update', 'destroy']);
+    
     // pages
     Route::resource('/pages', 'PageController')->only(['index', 'store', 'update', 'destroy']);
     Route::get('/api/pages', 'PageController@index_api');

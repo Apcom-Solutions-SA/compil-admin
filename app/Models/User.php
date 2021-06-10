@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
 {
@@ -59,5 +62,22 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
     public function isAdmin()
     {
         return ($this->role_id === 1);  // admin middleware
+    }
+
+    public function email_verification_link()
+    {
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 24 * 60)),
+            [
+                'id' => $this->getKey(),
+                'hash' => sha1($this->getEmailForVerification()),
+            ]
+        );
+
+        // modify url to change domain name to compil.app
+        $parsed_url = parse_url($url);
+        $new_url = config('app.front_url') . $parsed_url['path'] . '?' . $parsed_url['query'];
+        return $new_url;
     }
 }

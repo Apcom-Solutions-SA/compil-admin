@@ -345,4 +345,5 @@ return array (
   'notes' => 'Notes',
   'admins' => 'Admins',
   'Thanks' => 'Merci',
+  'verified' => 'vérifié',
 );

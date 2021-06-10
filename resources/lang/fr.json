@@ -53,5 +53,8 @@
     "Action": "Action",
     "Modifed with success!": "Modifié avec succès!",
     "Added with success!": "Ajouté avec succès!", 
-    "Please log in once via this url to validate your account.":"Veuillez vous connecter une première fois via cette url pour valider votre compte."
+    "Please log in once via this url to validate your account.":"Veuillez vous connecter une première fois via cette url pour valider votre compte.",
+    "The link is valide within 24 hours.":"Le lien est valide dans les 24 heures", 
+    "Your ID":"Votre identifiant", 
+    "Your password":"Votre mot de passe"
 }

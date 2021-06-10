@@ -10,6 +10,7 @@
 @component('mail::button', ['url' => $url])
 {{__('Verify Email Address')}}
 @endcomponent
+{{__('The link is valide within 24 hours.')}}
 
 {{__('front.thanks')}},<br>
 {{ config('app.name') }}

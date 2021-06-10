@@ -10,21 +10,44 @@ use App\Models\User;
 use App\Models\Group;
 use App\Mail\UserAdded;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 
 class UserController extends Controller
 {
     public function test()
     {
-        $users = User::whereNull('public_id')->get(); 
-        foreach ($users as $user){
+        $users = User::whereNull('public_id')->get();
+        foreach ($users as $user) {
             $user->public_id = md5($user->email);
             $user->update();
-        }         
+        }
     }
+
+    /**
+     * resend a new link
+     * in case the verification link is not valid anymore, or the user lost email
+     */
+    public function send_verification_link(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:users,id',
+        ]);
+
+        $user = User::find($request->id);
+
+        $password = random_key();  // defined in helper
+        $user->password = bcrypt($password);         
+        $user->save();
+
+        $public_id = $user->public_id; 
+
+        $url = $user->email_verification_link();
+        Mail::to($user)->send(new UserAdded($password, $public_id, $url));
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
     /**
      * add user from compil 
      */
@@ -40,6 +63,8 @@ class UserController extends Controller
         $email = strtolower($request->email);
         $public_id = md5($email);
         $parent_user = $request->user();
+
+        // if the parent user does not have public_id yet, create one
         if (!$parent_user->public_id) {
             $parent_user->public_id = md5($parent_user->email);
             $parent_user->save();
@@ -53,27 +78,15 @@ class UserController extends Controller
             'parent' => $parent_user->public_id
         ]);
 
-        // get verification url 
-        $url = URL::temporarySignedRoute(
-            'verification.verify',
-            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-            [
-                'id' => $user->getKey(),
-                'hash' => sha1($user->getEmailForVerification()),
-            ]
-        );
+        $url = $user->email_verification_link();
 
-        $parsed_url = parse_url($url); 
-        if (! $parsed_url) return response()->json(['message' => 'failed to parse url'], 500); 
-        $new_url = config('app.front_url').$parsed_url['path'].'?'.$parsed_url['query']; 
-
-
-        Mail::to($user)->send(new UserAdded($password, $public_id, $new_url));
+        Mail::to($user)->send(new UserAdded($password, $public_id, $url));
 
         return response()->json([
             'status' => 'success'
         ]);
     }
+
 
     public function index_admins(Request $request)
     {

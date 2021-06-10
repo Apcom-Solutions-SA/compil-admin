@@ -16,26 +16,26 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-
     // auth for api token
     public function login(Request $request)
     {
         // Impossible de se connecter avec une clé secrète valable si le compte est not verified.
         // unless for email verification
-        $email = request('email'); 
-        $user = User::where('email', $email)->first(); 
+        $email = request('email');
+        $user = User::where('email', $email)->first();
+
         if (is_null($user)) {
             return response()->json([
                 'message' => __('front.email_not_registered')
-            ], 401);
+            ], 404);
         }
 
+        // if the user's email is not verified, then the request should have hash for email verification
         if (is_null($user->email_verified_at) && is_null($request->hash)) {
             return response()->json([
                 'message' => __('front.email_not_verified')
-            ], 401);
+            ], 422);
         }
-
 
         $credentials = [
             'email' => request('email'),
@@ -43,21 +43,25 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials)) {
-            $user = Auth::user(); 
-            if ($request->hash && ! $user->hasVerifiedEmail()){
-                if (! hash_equals((string) $request->id, (string) $user->getKey())) {
-                    throw new AuthorizationException;
-                }                
-                if (! hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
-                    throw new AuthorizationException;
+            $user = Auth::user();
+            if ($request->hash && !$user->hasVerifiedEmail()) {
+                if (!hash_equals((string) $request->id, (string) $user->getKey())) {
+                    return response()->json([
+                        'message' => __('front.you_can_not_verify_the_current_user')
+                    ], 401);
                 }
-                $user->markEmailAsVerified(); 
+                if (!hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
+                    return response()->json([
+                        'message' => __('front.email_cannot_be_verified')
+                    ], 401);
+                }
+                $user->markEmailAsVerified();
             }
 
-            $token = $user->createToken($user->email)->accessToken;  
-            
+            $token = $user->createToken($user->email)->accessToken;
+
             return response()->json([
-                'token' => $token, 
+                'token' => $token,
                 'user' => $user,
             ]);
         }
