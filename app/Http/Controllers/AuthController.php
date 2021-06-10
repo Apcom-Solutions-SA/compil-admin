@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Log;
+use App\Mail\ForgotPassword;
+use Illuminate\Support\Facades\Mail;
 
 /*
  * Tutorial: https://blog.pusher.com/web-application-laravel-vue-part-2/
@@ -93,8 +95,17 @@ class AuthController extends Controller
         ]);
     }
 
-    public function getDetails()
+    public function forgot_password(Request $request)
     {
-        return response()->json(['success' => Auth::user()]);
+        $request->validate([
+            'email' => 'required|exists:users,email'
+        ]); 
+        $user = User::where('email', $request->email)->first(); 
+
+        $password = random_key();  // defined in helper
+        $user->password = bcrypt($password);         
+        $user->save();
+
+        Mail::to($user)->send(new ForgotPassword($password));
     }
 }

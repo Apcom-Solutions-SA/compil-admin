@@ -20,14 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function(){
     Route::post('login', 'AuthController@login');
+    Route::post('/forgot/password', 'AuthController@forgot_password');
+    Route::post('/email/verification-notification', 'UserController@send_verification_link'); 
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
-    Route::post('/user/email', 'UserController@email');
-    Route::post('/email/verification-notification', 'UserController@send_verification_link'); 
-    
+    Route::post('/user/email', 'UserController@email');   
+     
     Route::get('/list/pages', 'PageController@list_api'); 
-
     Route::get('/notes', 'NoteController@index_user'); 
     Route::post('/notes', 'NoteController@store');    
     Route::get('/notes/{reference}', 'NoteController@show'); 
