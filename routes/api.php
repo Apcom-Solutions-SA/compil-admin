@@ -29,6 +29,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
      
     Route::get('/list/pages', 'PageController@list_api'); 
     Route::get('/notes', 'NoteController@index_user'); 
+    Route::get('/my/notes', 'NoteController@index_mine'); 
     Route::post('/notes', 'NoteController@store');    
     Route::get('/notes/{reference}', 'NoteController@show'); 
     Route::patch('/notes/{id}', 'NoteController@update'); 

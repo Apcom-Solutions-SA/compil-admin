@@ -14,17 +14,19 @@ class UserAdded extends Mailable
     protected $password;
     public $public_id; 
     public $url;
+    public $email; 
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $password, string $public_id, string $url)
+    public function __construct(string $password, string $public_id, string $url, string $email)
     {
         $this->password = $password; 
         $this->public_id = $public_id; 
         $this->url = $url;
+        $this->email = $email; 
     }
 
     /**
@@ -39,7 +41,8 @@ class UserAdded extends Mailable
             ->markdown('emails.user.added',[
             'password' => $this->password,
             'public_id' => $this->public_id,
-            'url' => $this->url
+            'url' => $this->url, 
+            'email' => $this->email,
         ]);
     }
 }

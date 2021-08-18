@@ -80,7 +80,7 @@ class UserController extends Controller
 
         $url = $user->email_verification_link();
 
-        Mail::to($user)->send(new UserAdded($password, $public_id, $url));
+        Mail::to($user)->send(new UserAdded($password, $public_id, $url, $email));
 
         return response()->json([
             'status' => 'success'

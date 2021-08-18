@@ -85,6 +85,14 @@ class NoteController extends Controller
         return $notes->paginate($per_note);
     }
 
+    /**
+     *  “voir mes notes” au clic lister mes notes (toutes sans pagination)
+     */
+    public function index_mine(Request $request)
+    {
+        return Note::where('user_id', $request->user()->id)->orderBy('updated_at', 'desc')->get(); 
+    }
+
     /** 
      * Afficher les dernières notes en fonction de (dernière modification) plus récents
      */
