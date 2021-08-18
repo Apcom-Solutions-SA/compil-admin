@@ -88,7 +88,6 @@ class AuthController extends Controller
 
         $user = User::create($input);
         $token = $user->createToken('MyApp')->accessToken;
-        $name = $user->name;
 
         return response()->json([
             'token' => $token

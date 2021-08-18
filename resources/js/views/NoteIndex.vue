@@ -27,6 +27,7 @@
       <thead>
         <tr>
           <th>ID</th>
+          <th>{{ $t('admin.reference')}}</th>
           <th>{{ $t('admin.title')}}</th>
           <th>{{ $t('admin.introduction')}}</th>
           <th>{{ $t('admin.tags')}}</th>
@@ -40,6 +41,7 @@
           :key="item.id"
         >
           <td>{{ item.id }}</td>
+          <td>{{ item.reference }}</td>
           <td>{{ item.title}}</td>
           <td>{{ item.introduction }}</td>
           <td>{{ item.tags }}</td>
@@ -64,7 +66,7 @@
       height="auto"
       :scrollable="true"
     >
-      <div class="modal-container">
+      <div class="p-3">
         <p>{{ $t('admin.delete_confirm')}}</p>
         <div class="text-right">
           <button

@@ -9,10 +9,10 @@
 {{__('front.user_added_password')}}:
 {{ $password }}
 
-{{__('Please log in once via this url to validate your account.')}}
-{{__('This link will expire in 24 hours.')}}
+{{__('front.please_login_once')}}
+{{__('font.link_will_expire')}}
 @component('mail::button', ['url' => $url])
-{{__('Verify Email Address')}}
+{{__('front.verify_email')}}
 @endcomponent
 
 

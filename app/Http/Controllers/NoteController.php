@@ -171,8 +171,8 @@ class NoteController extends Controller
         // reference
         // y: A two digit representation of a year
         // m: Numeric representation of a month, with leading zeros, 01 through 12
-        $number = Note::whereRaw('YEAR(created_at) = ?', [date('Y')])->count();
-        $reference = date('y.') . sprintf('%03d', $number + 1);   // 4 digits with padding 0
+        $number = $note->id % 1000; 
+        $reference = date('y.') . sprintf('%03d', $number);   // 4 digits with padding 0
         $note->reference = $reference;
         $note->update();
 
